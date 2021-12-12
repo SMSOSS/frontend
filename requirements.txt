@@ -1,3 +1,5 @@
 opencv-python
 pyzbar
 Pillow
+mysql-connector-python
+pandas
