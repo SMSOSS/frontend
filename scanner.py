@@ -41,12 +41,12 @@ def update(connection, command):
 def brain(password):
     connection = connect("localhost", "user", "password", "tiferet")
     cmd =("SELECT isdeliver, istaken FROM food WHERE NOT istaken=1 AND password=({})".format(password)) # locker validity check
-    read = read(connection, cmd)
-    if read == (0, 0):
+    sts = read(connection, cmd)
+    if sts == (0, 0):
         # add your own hooks for opening locker
         cmd = ("UPDATE food SET isdeliver=1 WHERE password=({})".format(password))
         update(connection, cmd)
-    elif read == (1, 0):
+    elif sts == (1, 0):
         # add your own hooks for opening locker
         cmd = ("UPDATE food SET istaken=1 WHERE password=({})".format(password))
         update(connection, cmd)
