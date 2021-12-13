@@ -50,7 +50,11 @@ def brain(password):
         # add your own hooks for opening locker
         cmd = ("UPDATE food SET istaken=1 WHERE password=({})".format(password))
         update(connection, cmd)
-
+        cmd = ("SELECT locker FROM food WHERE istaken=1 AND password=({})".format(password))
+        ln = read(connection, cmd)
+        cmd = ("UPDATE lockerdata SET isoccupy=0 WHERE lockerid=({})".format(ln))
+        update(connection, cmd)
+        
 # Barcode start
 def read_barcodes(frame):
     barcodes = pyzbar.decode(frame)
