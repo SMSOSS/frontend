@@ -32,13 +32,13 @@ def read(connection, query):
     except Error as err:
         print(f"Error: '{err}'")
 
-def update(connection, command)
+def update(connection, command):
     cursor = connection.cursor()
     cursor.execute(command)
     connection.commit()
 
 # SQL: Logics
-def brain(password)
+def brain(password):
     connection = connect("localhost", "user", "password", "tiferet")
     cmd =("SELECT isdeliver, istaken FROM food WHERE NOT istaken=1 AND password=({})".format(password)) # locker validity check
     read = read(connection, cmd)
