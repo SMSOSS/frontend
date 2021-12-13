@@ -52,6 +52,7 @@ def brain(password):
         update(connection, cmd)
         cmd = ("SELECT locker FROM food WHERE istaken=1 AND password=({})".format(password))
         ln = read(connection, cmd)
+        ln = ln[0]
         cmd = ("UPDATE lockerdata SET isoccupy=0 WHERE lockerid=({})".format(ln))
         update(connection, cmd)
         
