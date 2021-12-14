@@ -40,14 +40,15 @@ def update(connection, command):
 # SQL: Logics
 def brain(password):
     connection = connect("localhost", "user", "password", "tiferet")
-    cmd =("SELECT isdeliver, istaken FROM food WHERE NOT istaken=1 AND password=({})".format(password)) # locker validity check
+    cmd = ("SELECT isdeliver, istaken FROM food WHERE NOT istaken=1 AND password=({})".format(password)) # locker validity check
     sts = read(connection, cmd)
-    if sts == (0, 0):
-        # add your own hooks for opening locker
+    if not sts:
+        # add hook for open locker
+        password = password-3 # deliverman
+        print("[DEBUG] real password is ({})".format(password))
         cmd = ("UPDATE food SET isdeliver=1 WHERE password=({})".format(password))
         update(connection, cmd)
-    elif sts == (1, 0):
-        # add your own hooks for opening locker
+    else:
         cmd = ("UPDATE food SET istaken=1 WHERE password=({})".format(password))
         update(connection, cmd)
         cmd = ("SELECT locker FROM food WHERE istaken=1 AND password=({})".format(password))
@@ -55,6 +56,20 @@ def brain(password):
         ln = ln[0]
         cmd = ("UPDATE lockerdata SET isoccupy=0 WHERE lockerid=({})".format(ln))
         update(connection, cmd)
+        
+    # if sts == (0, 0):
+    #     # add your own hooks for opening locker
+    #     cmd = ("UPDATE food SET isdeliver=1 WHERE password=({})".format(password))
+    #     update(connection, cmd)
+    # elif sts == (1, 0):
+    #     # add your own hooks for opening locker
+    #     cmd = ("UPDATE food SET istaken=1 WHERE password=({})".format(password))
+    #     update(connection, cmd)
+    #     cmd = ("SELECT locker FROM food WHERE istaken=1 AND password=({})".format(password))
+    #     ln = read(connection, cmd)
+    #     ln = ln[0]
+    #     cmd = ("UPDATE lockerdata SET isoccupy=0 WHERE lockerid=({})".format(ln))
+    #     update(connection, cmd)
         
 # Barcode start
 def read_barcodes(frame):
