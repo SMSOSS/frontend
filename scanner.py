@@ -45,6 +45,11 @@ def brain(password):
     if not sts:
         # add hook for open locker
         password = password-3 # deliverman
+        cmd = ("SELECT isdeliver, istaken FROM food WHERE NOT istaken=1 AND password=({})".format(password)) # locker validity check
+        sts = read(connection, cmd)
+        if not sts:
+            print("[ERROR] scanner: invalid qr detect")
+            return
         print("[DEBUG] real password is ({})".format(password))
         cmd = ("UPDATE food SET isdeliver=1 WHERE password=({})".format(password))
         update(connection, cmd)
