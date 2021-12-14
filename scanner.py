@@ -45,7 +45,7 @@ def brain(password):
     if not sts:
         # add hook for open locker
         password = int(password)
-        password = password-3 # deliverman
+        password = password-10000 # deliverman
         cmd = ("SELECT isdeliver, istaken FROM food WHERE NOT istaken=1 AND NOT iscooked=0 AND password=({})".format(password)) # locker validity check
         sts = read(connection, cmd)
         if not sts:
