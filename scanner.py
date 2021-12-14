@@ -71,7 +71,7 @@ def read_barcodes(frame):
         #1
         barcode_info = barcode.data.decode('utf-8')
         brain(barcode_info)
-        rmvtxt = "Recognized. Please remove QRCode"
+        rmvtxt = "Please remove QRCode"
         cv2.rectangle(frame, (x, y),(x+w, y+h), (0, 255, 0), 2)
         
         #2
