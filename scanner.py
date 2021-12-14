@@ -40,13 +40,13 @@ def update(connection, command):
 # SQL: Logics
 def brain(password):
     connection = connect("localhost", "user", "password", "tiferet")
-    cmd = ("SELECT isdeliver, istaken FROM food WHERE NOT istaken=1 AND password=({})".format(password)) # locker validity check
+    cmd = ("SELECT isdeliver, istaken FROM food WHERE NOT istaken=1 AND NOT iscooked=0 AND password=({})".format(password)) # locker validity check
     sts = read(connection, cmd)
     if not sts:
         # add hook for open locker
         password = int(password)
         password = password-3 # deliverman
-        cmd = ("SELECT isdeliver, istaken FROM food WHERE NOT istaken=1 AND password=({})".format(password)) # locker validity check
+        cmd = ("SELECT isdeliver, istaken FROM food WHERE NOT istaken=1 AND NOT iscooked=0 AND password=({})".format(password)) # locker validity check
         sts = read(connection, cmd)
         if not sts:
             print("[ERROR] scanner: invalid qr detect")
