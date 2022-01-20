@@ -3,3 +3,4 @@ pyzbar
 Pillow
 mysql-connector-python
 pandas
+RPi.GPIO
