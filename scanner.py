@@ -86,7 +86,7 @@ def read_barcodes(frame):
 
 def main():
     #0: GPIO settings
-    GPIO.setwarnings(False)
+    GPIO.setwarnings(True)
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(18, GPIO.OUT)
     #1
