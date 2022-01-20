@@ -5,6 +5,7 @@ import cv2
 from pyzbar import pyzbar
 import mysql.connector
 from mysql.connector import Error
+import RPi.GPIO as GPIO
 
 # SQL Start
 def connect(host, user, password, db):
@@ -51,12 +52,12 @@ def brain(password):
             print("[ERROR] scanner: invalid qr detect")
             return
         print("[DEBUG] real password is ({})".format(password))
-        # add hook for open locker
+        GPIO.output(18, 0)
         cmd = ("UPDATE food SET isdeliver=1 WHERE password=({})".format(password))
         update(connection, cmd)
     else:
         cmd = ("UPDATE food SET istaken=1 WHERE password=({})".format(password))
-        # add hook for open locker
+        GPIO.output(18, 1)
         update(connection, cmd)
         cmd = ("SELECT locker FROM food WHERE istaken=1 AND password=({})".format(password))
         ln = read(connection, cmd)
@@ -84,6 +85,10 @@ def read_barcodes(frame):
     return frame
 
 def main():
+    #0: GPIO settings
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(18, GPIO.OUT)
     #1
     camera = cv2.VideoCapture(0)
     ret, frame = camera.read()
