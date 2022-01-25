@@ -52,12 +52,12 @@ def brain(password):
             print("[ERROR] scanner: invalid qr detect")
             return
         print("[DEBUG] real password is ({})".format(password))
-        GPIO.output(18, 0)
+        GPIO.output(2, 0)
         cmd = ("UPDATE food SET isdeliver=1 WHERE password=({})".format(password))
         update(connection, cmd)
     else:
         cmd = ("UPDATE food SET istaken=1 WHERE password=({})".format(password))
-        GPIO.output(18, 1)
+        GPIO.output(2, 1)
         update(connection, cmd)
         cmd = ("SELECT locker FROM food WHERE istaken=1 AND password=({})".format(password))
         ln = read(connection, cmd)
@@ -88,7 +88,7 @@ def main():
     #0: GPIO settings
     GPIO.setwarnings(True)
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(18, GPIO.OUT)
+    GPIO.setup(2, GPIO.OUT)
     #1
     camera = cv2.VideoCapture(0)
     ret, frame = camera.read()
