@@ -16,9 +16,11 @@ while (True):
     
     #This Turns Relay Off. Brings Voltage to Max GPIO can output ~3.3V
     GPIO.output(2, 1)
+    print("DEBUG: lock should be locked")
     #Wait 1 Seconds
     sleep(1)
     #Turns Relay On. Brings Voltage to Min GPIO can output ~0V.
     GPIO.output(2, 0)
+    print("DEBUG: lock should be unlocked")
     #Wait 1 Seconds
     sleep(1)
