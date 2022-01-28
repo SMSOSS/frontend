@@ -6,6 +6,8 @@ from pyzbar import pyzbar
 import mysql.connector
 from mysql.connector import Error
 import RPi.GPIO as GPIO
+import time
+import threading
 
 # SQL Start
 def connect(host, user, password, db):
@@ -38,6 +40,14 @@ def update(connection, command):
     cursor.execute(command)
     connection.commit()
 
+# GPIO: Controller
+def unlock():
+    GPIO.output(2, 0)
+    print("DEBUG: unlock locker now for 30 second")
+    time.sleep(30)
+    GPIO.output(2, 1)
+    print("DEBUG: relock locker now")
+
 # SQL: Logics
 def brain(password):
     connection = connect("localhost", "user", "password", "tiferet")
@@ -52,13 +62,15 @@ def brain(password):
             print("[ERROR] scanner: invalid qr detect")
             return
         print("[DEBUG] real password is ({})".format(password))
-        GPIO.output(2, 0)
+        unlockCmd = threading.Thread(target=unlock)
+        unlockCmd.start()
         cmd = ("UPDATE food SET isdeliver=1 WHERE password=({})".format(password))
         update(connection, cmd)
     else:
         cmd = ("UPDATE food SET istaken=1 WHERE password=({})".format(password))
-        GPIO.output(2, 1)
         update(connection, cmd)
+        unlockCmd = threading.Thread(target=unlock)
+        unlockCmd.start()
         cmd = ("SELECT locker FROM food WHERE istaken=1 AND password=({})".format(password))
         ln = read(connection, cmd)
         ln = ln[0]
